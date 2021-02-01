@@ -1,4 +1,5 @@
-from pandas import read_excel, isna
+import pandas as pd
+import numpy as np
 
 #   Dictionary Layout : 
 #  
@@ -21,11 +22,39 @@ from pandas import read_excel, isna
 class DataCleaner():
 
     def __init__(self):
-        new_house_data = read_excel('pricing-by-area-new.xlsx')
+        '''
+        Reads in data from specific excel files 
+        '''
+        new_house_data = pd.read_excel('pricing-by-area-new.xlsx')
 
-        # column heading needs to be weird because the government don't know how to use excel lol
-        # we slice 1 through 47 as first item is place name and there is 47 years included in data (48 is not included in slicing logic)
-        self.national_data = new_house_data['Annual New Property prices  (includes houses and apartments) €'].tolist()[1:48]
+        area_data = {}
+        headings = new_house_data.columns[1:8]
+        places = new_house_data.iloc[0][1:8]
+        
+        for index, row in new_house_data.iterrows():
+            # first year (1969/1970) has no data for most places
+            # top row includes place names so we dont include it
+            if index > 1:
+                year = str(row['YEAR'])
+                values = row[headings]
 
-        # same as above
-        self.dublin_data = new_house_data['Unnamed: 2'].tolist()[1:48]
+                area_data[year] = {}
+                for pindex, place in enumerate(places):
+                    # append Location: Value to year dictionary
+                    # for each place in data
+                    area_data[year].update({
+                        place: round(values[pindex])
+                    })
+                
+                if index == 47:
+                    break
+        self.existing_area_average_data = area_data
+        
+        print(area_data['2003']['Dublin'])
+        
+    def dictify(self):
+        pass
+
+
+x = DataCleaner()
+
