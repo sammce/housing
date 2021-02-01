@@ -1,1 +1,2 @@
-pass
+def process():
+    pass
