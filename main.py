@@ -1,2 +1,10 @@
-def main():
-    pass
+from clean import DataCleaner
+
+
+# clean
+
+
+# process 
+
+
+# visualise 
