@@ -9,7 +9,7 @@ import numpy as np
 #
 #   Example:
 #       
-#       area_data['2003']['Dublin']  <---  MUST BE CAPITALISED AND TYPE STR
+#       existing_area_data['2003']['Dublin']['New']  <---  MUST BE CAPITALISED AND TYPE STR
 #
 #       This will return the average cost of housing that year in INT form
 #       We will use this to compare our findings from kaggle price register data
@@ -33,7 +33,8 @@ class DataCleaner():
         area_data = {}
         new_headings = new_house_data.columns[1:8]
         second_headings = second_house_data.columns[1:8]
-        self.places = new_house_data.iloc[0][1:8]
+        places = new_house_data.iloc[0][1:8]
+        self.places = places.tolist()
 
         second_row_values = []
         for index, row in second_house_data.iterrows():
@@ -53,7 +54,7 @@ class DataCleaner():
                 second_values = second_row_values[index]
 
                 area_data[year] = {}
-                for pindex, place in enumerate(self.places):
+                for pindex, place in enumerate(places):
                     # append Location: Value to year dictionary
                     # for each place in data
                     area_data[year].update({
@@ -67,11 +68,9 @@ class DataCleaner():
                     break
         self.existing_area_data = area_data
         
-    
-        
-    
+cleaner = DataCleaner()
 
+print(cleaner.existing_area_data['2004']['Limerick']['New'])
 
-x = DataCleaner()
 
 
