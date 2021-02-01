@@ -18,12 +18,14 @@ from pandas import read_excel, isna
 #       Then use that algorithm to predict 2017 - 2020 increase and perhaps even further
 #       We could collect our own data from property listings to use as more recent data
 
-new_house_data = read_excel('pricing-by-area-new.xlsx')
+class DataCleaner():
 
-# column heading needs to be weird because the government don't know how to use excel lol
-# we slice 1 through 47 as first item is place name and there is 47 years included in data (48 is not included in slicing logic)
-national_data = new_house_data['Annual New Property prices  (includes houses and apartments) €'].tolist()[1:48]
+    def __init__(self):
+        new_house_data = read_excel('pricing-by-area-new.xlsx')
 
-# same as above
-dublin_data = new_house_data['Unnamed: 2'].tolist()[1:48]
-print(new_house_data)
+        # column heading needs to be weird because the government don't know how to use excel lol
+        # we slice 1 through 47 as first item is place name and there is 47 years included in data (48 is not included in slicing logic)
+        self.national_data = new_house_data['Annual New Property prices  (includes houses and apartments) €'].tolist()[1:48]
+
+        # same as above
+        self.dublin_data = new_house_data['Unnamed: 2'].tolist()[1:48]
