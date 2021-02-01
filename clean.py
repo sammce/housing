@@ -21,9 +21,11 @@ import numpy as np
 
 class DataCleaner():
 
+    years = []
+
     def __init__(self):
         '''
-        Reads in data from specific excel files 
+        Reads in data from specific excel files and formats it
         '''
         new_house_data = pd.read_excel('pricing-by-area-new.xlsx')
         second_house_data = pd.read_excel('pricing-by-area-second.xlsx')
@@ -31,7 +33,7 @@ class DataCleaner():
         area_data = {}
         new_headings = new_house_data.columns[1:8]
         second_headings = second_house_data.columns[1:8]
-        places = new_house_data.iloc[0][1:8]
+        self.places = new_house_data.iloc[0][1:8]
 
         second_row_values = []
         for index, row in second_house_data.iterrows():
@@ -45,11 +47,13 @@ class DataCleaner():
             # top row includes place names so we dont include it
             if index > 6:
                 year = str(row['YEAR'])
+                self.years.append(year)
+
                 new_values = row[new_headings]
                 second_values = second_row_values[index]
 
                 area_data[year] = {}
-                for pindex, place in enumerate(places):
+                for pindex, place in enumerate(self.places):
                     # append Location: Value to year dictionary
                     # for each place in data
                     area_data[year].update({
@@ -63,10 +67,9 @@ class DataCleaner():
                     break
         self.existing_area_data = area_data
         
-        print(area_data['2003'])
+    
         
-    def dictify(self):
-        pass
+    
 
 
 x = DataCleaner()
