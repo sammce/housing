@@ -26,35 +26,49 @@ class DataCleaner():
         Reads in data from specific excel files 
         '''
         new_house_data = pd.read_excel('pricing-by-area-new.xlsx')
+        second_house_data = pd.read_excel('pricing-by-area-second.xlsx')
 
         area_data = {}
-        headings = new_house_data.columns[1:8]
+        new_headings = new_house_data.columns[1:8]
+        second_headings = second_house_data.columns[1:8]
         places = new_house_data.iloc[0][1:8]
+
+        second_row_values = []
+        for index, row in second_house_data.iterrows():
+            second_row_values.append(row[second_headings])
+
+            if index == 48:
+                break
         
         for index, row in new_house_data.iterrows():
             # first year (1969/1970) has no data for most places
             # top row includes place names so we dont include it
-            if index > 1:
+            if index > 6:
                 year = str(row['YEAR'])
-                values = row[headings]
+                new_values = row[new_headings]
+                second_values = second_row_values[index]
 
                 area_data[year] = {}
                 for pindex, place in enumerate(places):
                     # append Location: Value to year dictionary
                     # for each place in data
                     area_data[year].update({
-                        place: round(values[pindex])
+                        place: {
+                            'New': round(new_values[pindex]),
+                            'Old': round(second_values[pindex])
+                        }
                     })
                 
                 if index == 47:
                     break
-        self.existing_area_average_data = area_data
+        self.existing_area_data = area_data
         
-        print(area_data['2003']['Dublin'])
+        print(area_data['2003'])
         
     def dictify(self):
         pass
 
 
 x = DataCleaner()
+
 
