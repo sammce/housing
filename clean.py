@@ -9,7 +9,7 @@ import numpy as np
 #
 #   Example:
 #       
-#       area_price_new['2003']['Dublin']  <---  MUST BE CAPITALISED AND TYPE STR
+#       area_data['2003']['Dublin']  <---  MUST BE CAPITALISED AND TYPE STR
 #
 #       This will return the average cost of housing that year in INT form
 #       We will use this to compare our findings from kaggle price register data
