@@ -26,5 +26,4 @@ national_data = new_house_data['Annual New Property prices  (includes houses and
 
 # same as above
 dublin_data = new_house_data['Unnamed: 2'].tolist()[1:48]
-
 print(dublin_data)
