@@ -19,6 +19,7 @@ import numpy as np
 #       Then use that algorithm to predict 2017 - 2020 increase and perhaps even further
 #       We could collect our own data from property listings to use as more recent data
 
+
 class CleanedData():
 
     years = []
@@ -68,12 +69,11 @@ class CleanedData():
                 if index == 47:
                     break
 
-    
-        
-    def iter_years(self):
+    def iter_years(self, offset=1):
         data_list = []
-        for year in self.years:
-            data_list.append(self.area_data[year])
+        for index, year in enumerate(self.years):
+            if index % offset == 0:
+                data_list.append(self.area_data[year])
         return [year, data_list]
 
     def iter_places(self):
@@ -87,11 +87,47 @@ class CleanedData():
             data_list.append(locale_dict)
         return data_list
 
+    def search(self, *args, data={}):
+        # error check args
+        if len(args) == 0:
+            raise Exception('No search terms given, try entering a year like "2003"')
+        if len(args) > 3:
+            raise Exception(f'Too many search terms given, 3 is the most terms allowed. \n{len(args)} terms given')
+        
+        if len(data) == 0:
+            data = self.area_data
+
+        # parsing search args
+        for arg in args:
+            if arg.isalpha():
+                arg = arg.capitalize()
+                
+        working_dict = data
+        depth_searched = 0
+        # narrow down dict depth for each search arg given
+        for key in args:
+            try:
+                working_dict = working_dict[key]
+                depth_searched += 1
+            except KeyError:
+                pass
+
+        
+        if depth_searched != 0:
+            return working_dict
+        else:
+            print('''
+                Sobran Slimy Search couldn\'t traverse the dictionary with the given search values\n
+                Did you enter the search values correctly?
+            ''')
+            return False
+        
+
 
 cleaned = CleanedData()
 
-for place in cleaned.iter_places():
-    print(place, end="\n\n")
+print(cleaned.search('new', '2006', 'dublin'))
+
 
 
 
