@@ -19,7 +19,7 @@ import numpy as np
 #       Then use that algorithm to predict 2017 - 2020 increase and perhaps even further
 #       We could collect our own data from property listings to use as more recent data
 
-class DataCleaner():
+class CleanedData():
 
     years = []
 
@@ -67,11 +67,32 @@ class DataCleaner():
                 
                 if index == 47:
                     break
-        
-cleaner = DataCleaner()
 
-print(cleaner.area_data['2004']['Dublin']['New'])
-print(cleaner.years)
+    
+        
+    def iter_years(self):
+        data_list = []
+        for year in self.years:
+            data_list.append(self.area_data[year])
+        return [year, data_list]
+
+    def iter_places(self):
+        data_list = []
+        for place in self.places:
+            locale_dict = {}
+            for year in self.years:
+                locale_dict.update({
+                    year: self.area_data[year][place]
+                })
+            data_list.append(locale_dict)
+        return data_list
+
+
+cleaned = CleanedData()
+
+for place in cleaned.iter_places():
+    print(place, end="\n\n")
+
 
 
 
