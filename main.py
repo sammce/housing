@@ -1,4 +1,4 @@
-from clean import DataCleaner
+from clean import CleanedData
 
 
 # clean
