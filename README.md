@@ -8,6 +8,7 @@ main.py has access to an object from clean.py called DataCleaner, which has a fe
 
 
 # Example Code
+from clean import DataCleaner
 
 cleaner = DataCleaner()
 
