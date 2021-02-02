@@ -112,12 +112,11 @@ class CleanedData():
             except KeyError:
                 pass
 
-        
         if depth_searched != 0:
             return working_dict
         else:
             print('''
-                Sobran Slimy Search couldn\'t traverse the dictionary with the given search values\n
+                Sobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values\n
                 Did you enter the search values correctly?
             ''')
             return False
