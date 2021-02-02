@@ -3,14 +3,14 @@ Analyzed price increase of housing in Ireland to predict the increase in upcomin
 
 
 # Usage Guide
-main.py has access to an object from clean.py called DataCleaner, which has a few useful properties
+main.py has access to an object from clean.py called CleanedData, which has a few useful properties
 
 
 
 # Example Code
-from clean import DataCleaner
+from clean import CleanedData
 
-cleaner = DataCleaner()
+cleaned_data = CleanedData()
 
 print(cleaner.area_data['2004']['Dublin']['New'])      <---- Output: 322628
 
