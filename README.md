@@ -8,30 +8,41 @@ main.py has access to an object from clean.py called CleanedData, which has a fe
 
 
 # Example Code
+## Initialising the cleaned data
 ```python
 from clean import CleanedData
-
 cleaned = CleanedData()
+```
 
-print(cleaned.area_data['2004']['Dublin']['New'])      
-# 322628
+## Accessing the data
+### Static properties
+```python
 
 print(cleaned.places)     
 # ['National', 'Dublin', 'Cork', 'Galway', 'Limerick', 'Waterford', 'Other Areas']
 
 print(cleaned.years)    
 # ['1976', '1977', '1978', '1979', '1980', ... '2013', '2014', '2015', '2016']
+```
+
+### Methods
+```python
+
+print(cleaned.search('new', '2004', 'dublin')) 
+# 322628
+
+```
+#### Custom dictionary search
+```python
 
 for year in cleaned.iter_years():
   print(year)
-  print(year['Dublin']['New'])
 # {
 #   'National': {'New': 313483, 'Old': 276272}, 'Dublin': {'New': 397676, 'Old': 351354}, 
 #   'Cork': {'New': 293343, 'Old': 240683}, 'Galway': {'New': 262215, 'Old': 214645},
 #   'Limerick': {'New': 239024, 'Old': 192721}, 'Waterford': {'New': 239409, 'Old': 179609}, 
 #   'Other Areas': {'New': 272290, 'Old': 201272}
 # }
-# 397676
 
 # 40 of these would be printed, one for each year in study
 
