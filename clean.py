@@ -124,7 +124,6 @@ class CleanedData():
         
 
 
-
 cleaned = CleanedData()
 
 print(cleaned.search('new', '2006', 'dublin'))
