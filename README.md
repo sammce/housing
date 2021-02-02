@@ -10,6 +10,7 @@ main.py has access to an object from clean.py called DataCleaner, which has a fe
 # Example Code
 
 cleaner = DataCleaner()
+
 print(cleaner.area_data['2004']['Dublin']['New'])      <---- Output: 322628
 
 print(cleaner.places)     <---- Output: ['National', 'Dublin', 'Cork', 'Galway', 'Limerick', 'Waterford', 'Other Areas']
