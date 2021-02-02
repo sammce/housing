@@ -30,7 +30,7 @@ class DataCleaner():
         new_house_data = pd.read_excel('pricing-by-area-new.xlsx')
         second_house_data = pd.read_excel('pricing-by-area-second.xlsx')
 
-        area_data = {}
+        self.area_data = {}
         new_headings = new_house_data.columns[1:8]
         second_headings = second_house_data.columns[1:8]
         places = new_house_data.iloc[0][1:8]
@@ -48,16 +48,17 @@ class DataCleaner():
             # top row includes place names so we dont include it
             if index > 6:
                 year = str(row['YEAR'])
+                # setup a list of all years included in data
                 self.years.append(year)
 
                 new_values = row[new_headings]
                 second_values = second_row_values[index]
 
-                area_data[year] = {}
+                self.area_data[year] = {}
                 for pindex, place in enumerate(places):
-                    # append Location: Value to year dictionary
-                    # for each place in data
-                    area_data[year].update({
+                    # append values to dictionary
+                    # for each place mentioned in data
+                    self.area_data[year].update({
                         place: {
                             'New': round(new_values[pindex]),
                             'Old': round(second_values[pindex])
@@ -66,11 +67,11 @@ class DataCleaner():
                 
                 if index == 47:
                     break
-        self.existing_area_data = area_data
         
 cleaner = DataCleaner()
 
-print(cleaner.existing_area_data['2004']['Limerick']['New'])
+print(cleaner.area_data['2004']['Dublin']['New'])
+print(cleaner.years)
 
 
 
