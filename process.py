@@ -8,7 +8,8 @@ class ProcessedData(CleanedData):
 
     def get_annual_change(self, period=1):
         '''
-        Algorithm to calculate numerical and percentage increase in average pricing from 1 year to the next
+        Algorithm to calculate numerical and percentage increase in average pricing between a number of years specified in the period keywoird argument
+        Returns a dictionary
         '''
         self.annual_data = {}
         count = 0
