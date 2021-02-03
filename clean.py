@@ -1,6 +1,12 @@
 import pandas as pd
 import numpy as np
 
+# makes color ANSI codes work properly
+from os import system
+system("")
+
+from formatter import Formatter
+
 #   Dictionary Layout : 
 #  
 #       Year: {
@@ -19,7 +25,8 @@ import numpy as np
 #       Then use that algorithm to predict 2017 - 2020 increase and perhaps even further
 #       We could collect our own data from property listings to use as more recent data
 
-class CleanedData():
+
+class CleanedData(Formatter):
 
     years = []
 
@@ -63,17 +70,15 @@ class CleanedData():
                             'New': round(new_values[pindex]),
                             'Old': round(second_values[pindex])
                         }
-                    })
-                
+                    }) 
                 if index == 47:
                     break
 
-    
-        
-    def iter_years(self):
+    def iter_years(self, offset=1):
         data_list = []
-        for year in self.years:
-            data_list.append(self.area_data[year])
+        for index, year in enumerate(self.years):
+            if index % offset == 0:
+                data_list.append([year, self.area_data[year]])
         return [year, data_list]
 
     def iter_places(self):
@@ -84,14 +89,63 @@ class CleanedData():
                 locale_dict.update({
                     year: self.area_data[year][place]
                 })
-            data_list.append(locale_dict)
+            data_list.append([place, locale_dict])
         return data_list
 
+    def search(self, *args, data={}):
+        # error check args
+        if len(args) == 0:
+            raise Exception('No search terms given, try entering a year like "2003"')
+        if len(args) > 3:
+            raise Exception(f'Too many search terms given, 3 is the most terms allowed. \n{len(args)} terms given')
+        
+        if len(data) == 0:
+            data = self.area_data
+
+        # parsing search args
+        for arg in args:
+            if arg.isalpha():
+                arg = arg.capitalize()
+                
+        working_dict = data
+        depth_searched = 0
+        found = False
+
+        # loop logic
+        # -->   for each arg
+        #       compare to each key in dict
+        #       if equal, set new dict and start again
+
+        #       do until match is found or every arg is looped and
+        #       no match is found, then return
+        while not found:
+            for key in working_dict:
+                for arg in args:
+                    if key == arg:
+                        working_dict = working_dict[key]
+                        depth_searched += 1
+                        break
+                else: 
+                    found = True
+                    break
+
+        if depth_searched != 0:
+            self.nice(f'\nTraversed {depth_searched} dimension(s) deep')
+            if type(working_dict) == "dict":
+                self.warn('Couldn\'t traverse any deeper, dictionary returned')
+            return working_dict
+        else:
+            self.warn('\nSobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values:')
+            for arg in args:
+                self.bold(' ' + arg)
+            print('Did you enter the values correctly?')
+            return
 
 cleaned = CleanedData()
+for place, data in cleaned.iter_places():
+    print(place)
+    print(data)
 
-for place in cleaned.iter_places():
-    print(place, end="\n\n")
 
 
 
