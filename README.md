@@ -101,36 +101,9 @@ for place, data in cleaned.iter_places():
 
 ## Formatting 
 
-
 ### Inheriting the class
 ```python
-from formatter import Formatter
-
-class MyClass(Formatter):
-  ...
-```
-
-When `Formatter` is inherited, your class gains access to several methods which style the console output.
-
-### Methods
-
-
-#### Internally
-```python
-class MyClass(Formatter):
-
-  def display_error(self, message):
-    self.warn(message, end='\n')
-```
-
-The `end` keyword argument is optional, and functions the same as in the `print` function
-
-```python
-my_class = MyClass()
-my_class.display_error('Something went wrong!')
-```
-```diff
-- Something went wrong!
+from formatting
 ```
 
 
