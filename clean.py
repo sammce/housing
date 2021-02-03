@@ -1,6 +1,12 @@
 import pandas as pd
 import numpy as np
 
+# makes color ANSI codes work properly
+from os import system
+system("")
+
+from formatting import Formatter
+
 #   Dictionary Layout : 
 #  
 #       Year: {
@@ -20,7 +26,7 @@ import numpy as np
 #       We could collect our own data from property listings to use as more recent data
 
 
-class CleanedData():
+class CleanedData(Formatter):
 
     years = []
 
@@ -113,19 +119,19 @@ class CleanedData():
                 pass
 
         if depth_searched != 0:
+            self.nice(f'\nTraversed {depth_searched} dimension(s) deep')
             return working_dict
         else:
-            print('''
-                Sobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values\n
-                Did you enter the search values correctly?
-            ''')
-            return False
+            self.warn('\nSobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values:')
+            for arg in args:
+                self.bold(' ' + arg)
+            print('Did you enter the values correctly?')
+            return
         
-
 
 cleaned = CleanedData()
 
-print(cleaned.search('new', '2006', 'dublin'))
+print(cleaned.search('new', '20006'))
 
 
 
