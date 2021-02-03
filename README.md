@@ -3,7 +3,12 @@ Analyzed price increase of housing in Ireland to predict the increase in upcomin
 
 
 # Usage Guide
-main.py has access to an object from clean.py called CleanedData, which has a few useful properties
+`clean.py` contains a class called `CleanedData`, which has a few useful properties which are outlined below.
+
+Similarly, `process.py` has a class called `ProcessedData`, which is outlined further down.
+
+All classes inherit a `Formatter` class from `formatting.py`, which adds custom print colours to console. This is
+also outlined below.
 
 
 # Example Code
@@ -44,15 +49,20 @@ dictionary = {
     'nested key': 'nested value'
   }
 }
-print(cleaned.search('nested key', 'key', data=dictionary)) #  <---- Order doesn't matter
+print(cleaned.search('nested key', 'key', data=dictionary))
 # nested value 
 
 ```
+The order of the search keys doesn't matter, the algorithm will search as deep as it can regardless
 #### Iteration Methods
 ```python
 
-for year in cleaned.iter_years():
+for year, data in cleaned.iter_years():
   print(year)
+  print(data)
+  
+# 2016
+  
 # {
 #   'National': {'New': 313483, 'Old': 276272}, 'Dublin': {'New': 397676, 'Old': 351354}, 
 #   'Cork': {'New': 293343, 'Old': 240683}, 'Galway': {'New': 262215, 'Old': 214645},
@@ -87,4 +97,11 @@ for place, data in cleaned.iter_places():
 # 262215
 
 # This would print 7 times, one for each location
+```
+
+## Formatting 
+
+### Inheriting the class
+```python
+from formatting
 ```
