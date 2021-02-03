@@ -142,9 +142,7 @@ class CleanedData(Formatter):
             return
 
 cleaned = CleanedData()
-for place, data in cleaned.iter_places():
-    print(place)
-    print(data)
+print(cleaned.search('2004', 'dublin', 'new'))
 
 
 
