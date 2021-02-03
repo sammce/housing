@@ -1,14 +1,22 @@
-from clean import CleanedData 
+from clean import CleanedData
 
-class ProcessedData(CleanedData):
-
+class ProcessedData():
+    
     def __init__(self):
-        # create cleaned object
+        
         super().__init__()
         print(self.years)
-
-    def percentage(self):
-        # percentage change from year to year
-        # percentage change decade to decade
-        # percentage change overall
         pass
+    
+    def percentage(self):
+        pass
+  
+  
+print(cleaned.places)
+
+print(cleaned.years)
+
+for year, data in cleaned.iter_years():
+  print(year)
+  print(data)
+
