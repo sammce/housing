@@ -8,14 +8,17 @@ main.py has access to an object from clean.py called CleanedData, which has a fe
 
 
 # Example Code
-## Initialising the cleaned data
+
+
+## Cleaner
+### Initialising the cleaned data
 ```python
 from clean import CleanedData
 cleaned = CleanedData()
 ```
 
-## Accessing the data
-### Static properties
+### Accessing the data
+#### Static properties
 ```python
 
 print(cleaned.places)     
@@ -25,14 +28,22 @@ print(cleaned.years)
 # ['1976', '1977', '1978', '1979', '1980', ... '2013', '2014', '2015', '2016']
 ```
 
-### Methods
+#### Search Method
 ```python
 
 print(cleaned.search('new', '2004', 'dublin')) 
 # 322628
 
+dictionary = {
+  'key': {
+    'nested key': 'nested value'
+  }
+}
+print(cleaned.search('nested key', 'key', data=dictionary)) #  <---- Order doesn't matter
+# nested value 
+
 ```
-#### Custom dictionary search
+#### Iteration Methods
 ```python
 
 for year in cleaned.iter_years():
