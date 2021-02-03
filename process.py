@@ -8,6 +8,10 @@ class ProcessedData(CleanedData):
         print(self.years)
 
     def percentage(self):
+        # percentage change from year to year
+        # percentage change decade to decade
+        # percentage change overall
+
         pass
 
 processed = ProcessedData()
