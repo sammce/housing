@@ -1,4 +1,4 @@
-# housing
+# Housing Analysis
 Analyzed price increase of housing in Ireland to predict the increase in upcoming years
 
 
@@ -37,6 +37,8 @@ print(cleaned.years)
 print(cleaned.search('new', '2004', 'dublin')) 
 # 322628
 
+
+# Custom data
 dictionary = {
   'key': {
     'nested key': 'nested value'
@@ -60,9 +62,12 @@ for year in cleaned.iter_years():
 
 # 40 of these would be printed, one for each year in study
 
-for place in cleaned.iter_places():
+for place, data in cleaned.iter_places():
   print(place)
-  print(place['2016']['New'])
+  print(data)
+  print(cleaned.search('new', '2016', data=data))
+  
+# Galway
   
 # {'1976': {'New': 17842, 'Old': 16858}, '1977': {'New': 21715, 'Old': 20792}, '1978': {'New': 26244, 'Old': 27862}, 
 # '1979': {'New': 30466, 'Old': 29539}, '1980': {'New': 33839, 'Old': 32978}, '1981': {'New': 39729, 'Old': 40333}, 
@@ -78,6 +83,8 @@ for place in cleaned.iter_places():
 # '2009': {'New': 236113, 'Old': 259285}, '2010': {'New': 219459, 'Old': 236695}, '2011': {'New': 229558, 'Old': 216748}, 
 # '2012': {'New': 219233, 'Old': 205611}, '2013': {'New': 218308, 'Old': 199224}, '2014': {'New': 218016, 'Old': 198869}, 
 # '2015': {'New': 241058, 'Old': 201805}, '2016': {'New': 262215, 'Old': 214645}}
+
+# 262215
 
 # This would print 7 times, one for each location
 ```
