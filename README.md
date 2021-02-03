@@ -6,11 +6,12 @@ Analyzed price increase of housing in Ireland to predict the increase in upcomin
 main.py has access to an object from clean.py called CleanedData, which has a few useful properties
 
 
-
 # Example Code
 
 
 ## Cleaner
+
+
 ### Initialising the cleaned data
 ```python
 from clean import CleanedData
@@ -18,6 +19,8 @@ cleaned = CleanedData()
 ```
 
 ### Accessing the data
+
+
 #### Static properties
 ```python
 
