@@ -3,9 +3,7 @@ Analyzed price increase of housing in Ireland to predict the increase in upcomin
 
 
 # Usage Guide
-`clean.py` contains a class called `CleanedData`, which has a few useful properties which are outlined below.
-
-Similarly, `process.py` has a class called `ProcessedData`, which is outlined further down.
+`process.py` contains a class called `ProcessedData`, which has a few useful properties which are outlined below.
 
 All classes inherit a `Formatter` class from `formatting.py`, which adds custom print colours to console. This is
 also outlined below.
@@ -14,13 +12,13 @@ also outlined below.
 # Example Code
 
 
-## Cleaner
+## Processed Data Class
 
 
-### Initialising the cleaned data
+### Initialising the class
 ```python
-from clean import CleanedData
-cleaned = CleanedData()
+from process import ProcessedData
+processed = ProcessedData()
 ```
 
 ### Accessing the data
@@ -29,35 +27,37 @@ cleaned = CleanedData()
 #### Static properties
 ```python
 
-print(cleaned.places)     
+print(process.places)     
 # ['National', 'Dublin', 'Cork', 'Galway', 'Limerick', 'Waterford', 'Other Areas']
 
-print(cleaned.years)    
+print(process.years)    
 # ['1976', '1977', '1978', '1979', '1980', ... '2013', '2014', '2015', '2016']
 ```
 
 #### Search Method
 ```python
 
-print(cleaned.search('new', '2004', 'dublin')) 
+print(process.search('new', '2004', 'dublin')) 
 # 322628
 
 
-# Custom data
+# Custom data search
 dictionary = {
   'key': {
     'nested key': 'nested value'
   }
 }
-print(cleaned.search('nested key', 'key', data=dictionary))
+print(process.search('nested key', 'key', data=dictionary))
 # nested value 
 
 ```
-The order of the search keys doesn't matter, the algorithm will search as deep as it can regardless
+The order of the search keys doesn't matter, the algorithm will search as deep as it can regardless. 
+You can also have as many search clauses as you want.
+The data keywork argument is optional, but when using it ensure it's the last argument.
 #### Iteration Methods
 ```python
 
-for year, data in cleaned.iter_years():
+for year, data in processed.iter_years():
   print(year)
   print(data)
   
@@ -72,7 +72,7 @@ for year, data in cleaned.iter_years():
 
 # 40 of these would be printed, one for each year in study
 
-for place, data in cleaned.iter_places():
+for place, data in processed.iter_places():
   print(place)
   print(data)
   print(cleaned.search('new', '2016', data=data))
