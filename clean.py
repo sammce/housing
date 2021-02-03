@@ -5,7 +5,7 @@ import numpy as np
 from os import system
 system("")
 
-from formatting import Formatter
+from formatter import Formatter
 
 #   Dictionary Layout : 
 #  
