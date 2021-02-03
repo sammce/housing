@@ -70,8 +70,7 @@ class CleanedData(Formatter):
                             'New': round(new_values[pindex]),
                             'Old': round(second_values[pindex])
                         }
-                    })
-                
+                    }) 
                 if index == 47:
                     break
 
@@ -79,7 +78,7 @@ class CleanedData(Formatter):
         data_list = []
         for index, year in enumerate(self.years):
             if index % offset == 0:
-                data_list.append(self.area_data[year])
+                data_list.append([year, self.area_data[year]])
         return [year, data_list]
 
     def iter_places(self):
@@ -90,7 +89,7 @@ class CleanedData(Formatter):
                 locale_dict.update({
                     year: self.area_data[year][place]
                 })
-            data_list.append(locale_dict)
+            data_list.append([place, locale_dict])
         return data_list
 
     def search(self, *args, data={}):
@@ -110,16 +109,30 @@ class CleanedData(Formatter):
                 
         working_dict = data
         depth_searched = 0
-        # narrow down dict depth for each search arg given
-        for key in args:
-            try:
-                working_dict = working_dict[key]
-                depth_searched += 1
-            except KeyError:
-                pass
+        found = False
+
+        # loop logic
+        # -->   for each arg
+        #       compare to each key in dict
+        #       if equal, set new dict and start again
+
+        #       do until match is found or every arg is looped and
+        #       no match is found, then return
+        while not found:
+            for key in working_dict:
+                for arg in args:
+                    if key == arg:
+                        working_dict = working_dict[key]
+                        depth_searched += 1
+                        break
+                else: 
+                    found = True
+                    break
 
         if depth_searched != 0:
             self.nice(f'\nTraversed {depth_searched} dimension(s) deep')
+            if type(working_dict) == "dict":
+                self.warn('Couldn\'t traverse any deeper, dictionary returned')
             return working_dict
         else:
             self.warn('\nSobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values:')
@@ -127,11 +140,11 @@ class CleanedData(Formatter):
                 self.bold(' ' + arg)
             print('Did you enter the values correctly?')
             return
-        
 
 cleaned = CleanedData()
-
-print(cleaned.search('new', '20006'))
+for place, data in cleaned.iter_places():
+    print(place)
+    print(data)
 
 
 
