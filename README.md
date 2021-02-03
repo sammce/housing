@@ -114,13 +114,19 @@ When `Formatter` is inherited, your class gains access to several methods which 
 
 ### Methods
 
+```python
+Formatter.warn(message, end='\n') # <-- Prints text in yellow
+Formatter.fatal(message, end='\n') # <-- Prints text in red
+Formatter.success(message, end='\n') # <-- Prints text in green
+Formatter.nice(message, end='\n') # <-- Prints text in cyan
+```
 
-#### Internally
+#### Example
 ```python
 class MyClass(Formatter):
 
   def display_error(self, message):
-    self.warn(message, end='\n')
+    self.fatal(message, end='\n')
 ```
 
 The `end` keyword argument is optional, and functions the same as in the `print` function
