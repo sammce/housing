@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 # makes color ANSI codes work properly
 from os import system
