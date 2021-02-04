@@ -74,23 +74,14 @@ class CleanedData(Formatter):
                 if index == 47:
                     break
 
-    def sort_by_year(self, offset=1):
-        data_list = []
-        for index, year in enumerate(self.years):
-            if index % offset == 0:
-                data_list.append([year, self.area_data[year]])
-        return [year, data_list]
-
     def sort_by_place(self):
-        data_list = []
         for place in self.places:
             locale_dict = {}
             for year in self.years:
-                locale_dict.update({
+                locale_dict.update({place: {
                     year: self.area_data[year][place]
-                })
-            data_list.append([place, locale_dict])
-        return data_list
+                }})
+        return [place, locale_dict]
 
     def search(self, *args, data={}, iteration=0):
 
