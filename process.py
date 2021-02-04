@@ -31,7 +31,7 @@ class ProcessedData(CleanedData):
                     # get values using search method for each combination 
                     # of data (for that year and the year previous)
                     value = self.search(year, place, time)
-                    previous_value = self.search(self.years[index - 1], place, time)
+                    previous_value = self.search(self.years[index - period], place, time)
                     if type(value) == dict or type(previous_value) == dict:
                         continue
 
