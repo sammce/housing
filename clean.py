@@ -85,6 +85,10 @@ class CleanedData(Formatter):
 
     def search(self, *args, data={}, iteration=0):
 
+        if type(data) == int:
+            self.nice(f'\nTraversed {iteration} dimension(s) deep')
+            return data
+
         if type(args[0]) == tuple and len(args) == 1:
             args = args[0]
 
@@ -93,7 +97,7 @@ class CleanedData(Formatter):
             self.fatal('No search terms given, try entering a year like "2003"')
             exit()
 
-        if len(data) == 0:
+        if type(data) == dict and len(data) == 0:
             data = self.area_data
 
         for arg in args:
@@ -103,7 +107,7 @@ class CleanedData(Formatter):
             except KeyError:
                 continue
         else:
-            if type(data) == int or iteration != 0:
+            if iteration != 0:
                 self.nice(f'\nTraversed {iteration} dimension(s) deep')
                 return data
             else:
