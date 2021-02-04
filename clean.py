@@ -92,54 +92,36 @@ class CleanedData(Formatter):
             data_list.append([place, locale_dict])
         return data_list
 
-    def search(self, *args, data={}):
+    def search(self, *args, data={}, iteration=0):
+
+        if type(args[0]) == tuple and len(args) == 1:
+            args = args[0]
+
         # error check args
         if len(args) == 0:
-            self.warn('No search terms given, try entering a year like "2003"')
+            self.fatal('No search terms given, try entering a year like "2003"')
             exit()
-        
+
         if len(data) == 0:
             data = self.area_data
 
-        args = list(map(lambda x: x.capitalize(), args))
-                
-        working_dict = data
-        old_dict = {}
-        depth_searched = 0
-        found = False
-        # loop logic
-        # -->   for each arg
-        #       compare to each key in dict
-        #       if equal, set new dict and start again
-
-        #       do until match is found or every arg is looped and
-        #       no match is found, then return
-        while not found:
-            for key in working_dict:
-                for arg in args:
-                    if key == arg:
-                        working_dict = working_dict[key]
-                        depth_searched += 1
-                        break
-                else:
-                    continue
+        for arg in args:
+            try:
+                data = data[arg.capitalize()]
                 break
-            if old_dict == working_dict or type(working_dict) == int:
-                break
-            else:
-                old_dict = working_dict
-            
-        if depth_searched != 0:
-            self.nice(f'\nTraversed {depth_searched} dimension(s) deep')
-            if type(working_dict) == dict:
-                self.warn('Couldn\'t traverse any deeper, dictionary returned')
-            return working_dict
+            except KeyError:
+                continue
         else:
-            self.warn('\nSobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values:')
-            for arg in args:
-                self.bold(' ' + arg)
-            print('Did you enter the values correctly?')
-            return
+            if type(data) == int or iteration != 0:
+                self.nice(f'\nTraversed {iteration} dimension(s) deep')
+                return data
+            else:
+                self.warn('\nSobran McFenniott Slimy Search couldn\'t traverse the dictionary with the given search values:')
+                for arg in args:
+                    self.bold(' ' + arg)
+                print('Did you enter the values correctly?')
+        return self.search(args, data=data, iteration=iteration+1)
 
 if __name__=='__main__':
     cleaned = CleanedData()
+    print(cleaned.search('2004', 'dublin'))
