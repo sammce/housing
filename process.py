@@ -51,9 +51,12 @@ class ProcessedData(CleanedData):
 
         return self.annual_data
 
+        
+
 if __name__=='__main__':
+    from process import ProcessedData
+    
     processed = ProcessedData()
 
-    annual_change = processed.get_annual_change(period=10)
+    annual_change = processed.get_annual_change()
     print(annual_change)
-    print(processed.search('1986', 'National', data=annual_change))
