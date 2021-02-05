@@ -80,6 +80,5 @@ class CleanedData(Formatter):
         
 if __name__=='__main__':
     cleaned = CleanedData()
-    print(cleaned.get_location(cleaned.old_averages, 'dublin'))
-    # print(cleaned.new_averages.columns)
+    print(cleaned.get_location(cleaned.old_averages, 'Dublin'))
 #     print(cleaned.search('2004', 'dublin'))

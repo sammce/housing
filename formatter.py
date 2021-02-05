@@ -14,7 +14,7 @@ class Formatter():
         print(self.WARNING + message + self.ENDC, end=end)
 
     def fatal(self, message, end='\n'):
-        print(self.FAIL + message + self.ENDC, end=end)
+        return self.FAIL + message + self.ENDC
 
     def success(self, message, end='\n'):
         print(self.OKGREEN + message + self.ENDC, end=end)

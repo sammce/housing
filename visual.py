@@ -1,4 +1,7 @@
-def visualize():
-    pass
+from process import ProcessedData
+import plotly.express as px
 
-print("Hello")
+class VisualisedData(ProcessedData):
+
+    def __init__(self):
+        super().__init__()

@@ -1,4 +1,5 @@
-from clean import CleanedData 
+from clean import CleanedData
+import statistics
 
 class ProcessedData(CleanedData):
 
@@ -11,47 +12,14 @@ class ProcessedData(CleanedData):
         Algorithm to calculate numerical and percentage increase in average pricing between a number of years specified in the period keywoird argument
         Returns a dictionary
         '''
-        self.annual_data = {}
-        count = 0
+        pass
 
-        for index, year in enumerate(self.years):
-            if index == 0 or index % period != 0:
-                continue
+    def get_median(self, data_list):
+        median = data_list[len(data_list) // 2]
+        return median 
 
-            self.annual_data[year] = {}
-
-            for place in self.places:
-
-                self.annual_data[year][place] = {}
-
-                for time in ('New', 'Old'):
-                    self.annual_data[year][place][time] = {}
-                    count += 1
-
-                    # get values using search method for each combination 
-                    # of data (for that year and the year previous)
-                    value = self.search(year, place, time)
-                    previous_value = self.search(self.years[index - period], place, time)
-                    if type(value) == dict or type(previous_value) == dict:
-                        continue
-
-                    # calculate difference and percentage change
-                    difference = value - previous_value
-                    percentage = (difference / previous_value) * 100
-
-                    # store processed data in dict
-                    self.annual_data[year][place][time].update({
-                        "Percentage": round(percentage, 2),
-                        "Numerical": round(difference)
-                    })
-
-        self.nice("\nSearched area data", end=" ")
-        self.bold(str(count), end=" ")
-        self.nice("times")
-
-        return self.annual_data
-
-        
+    def get_mode(self, data_list):
+        return statistics.mode(data_list)
 
 if __name__=='__main__':
     from process import ProcessedData
