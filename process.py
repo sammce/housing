@@ -1,5 +1,4 @@
 from clean import CleanedData
-import statistics
 
 class ProcessedData(CleanedData):
 
@@ -26,19 +25,24 @@ class ProcessedData(CleanedData):
         return median 
 
     def get_mode(self, data_list):
-        return statistics.mode(data_list)
+        return self.np.mode(data_list)
 
         
     def get_mean(self, data_list):
-        return statistics.mean(data_list)
+        return self.np.mean(data_list)
     
     def get_manual_mean(self, data_list):
         return sum(data_list) / len(data_list)
 
 
+    def get_frequency(self, data_list):
+        data = self.pd.Series(data_list)
+        data.value_counts()
+        data.value_counts(sort=false)
+        return data.value_counts()
 
-
-
+    def get_min_max(self, data_list):
+        return min(data_list), max(data_list)
 
 
 
