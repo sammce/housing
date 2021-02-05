@@ -14,12 +14,35 @@ class ProcessedData(CleanedData):
         '''
         pass
 
+    
+    
+    
+    
+    
+    
+
     def get_median(self, data_list):
         median = data_list[len(data_list) // 2]
         return median 
 
     def get_mode(self, data_list):
         return statistics.mode(data_list)
+
+        
+    def get_mean(self, data_list):
+        return statistics.mean(data_list)
+    
+    def get_manual_mean(self, data_list):
+        return sum(data_list) / len(data_list)
+
+
+
+
+
+
+
+
+
 
 if __name__=='__main__':
     from process import ProcessedData
