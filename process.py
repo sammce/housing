@@ -1,5 +1,4 @@
 from clean import CleanedData
-import statistics
 
 class ProcessedData(CleanedData):
 
@@ -7,24 +6,45 @@ class ProcessedData(CleanedData):
         # create cleaned object
         super().__init__()
 
-    def get_annual_change(self, period=1):
         '''
         Algorithm to calculate numerical and percentage increase in average pricing between a number of years specified in the period keywoird argument
         Returns a dictionary
         '''
-        pass
+        self.change_frames = self.np.array([])
+        
+        for index, frame in enumerate([self.new, self.old]):
+            data = {}
+            for year in self.years:
+                if year == 1976:
+                    continue
+                row = self.get_year(frame, year)
+                prev_row = self.get_year(frame, year - 1)
+                row_values = []
+
+                for place in self.places:
+                    place_value = self.get_location(row, place)
+                    prev_place_value = self.get_location(prev_row, place)
+
+                    difference = place_value - prev_place_value
+                    percentage = round((difference / prev_place_value) * 100, 2)
+
+                    row_values.append({'num':difference, 'percent':percentage})
+                data[year] = row_values
+ 
+            # appends the DataFrame remade with the calculated percentages dict above to self.change_frames
+            if index == 0:
+                self.new_change = self.pd.DataFrame.from_dict(data, orient="index", columns=self.places)
+            else:
+                self.old_change = self.pd.DataFrame.from_dict(data, orient="index", columns=self.places)
 
     def get_median(self, data_list):
-        median = data_list[len(data_list) // 2]
-        return median 
+        return data_list[len(data_list) // 2] 
 
     def get_mode(self, data_list):
-        return statistics.mode(data_list)
+        return self.statistics.mode(data_list)
 
 if __name__=='__main__':
-    from process import ProcessedData
-    
     processed = ProcessedData()
-
-    annual_change = processed.get_annual_change()
-    print(annual_change)
+    
+    change_dict = processed.search(processed.new_change, 'dublin', 2004)
+    print(change_dict['num'])

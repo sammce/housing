@@ -10,17 +10,17 @@ class Formatter():
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
         
-    def warn(self, message, end='\n'):
-        print(self.WARNING + message + self.ENDC, end=end)
+    def warn(self, message):
+        return self.WARNING + message + self.ENDC
 
-    def fatal(self, message, end='\n'):
+    def fatal(self, message):
         return self.FAIL + message + self.ENDC
 
-    def success(self, message, end='\n'):
-        print(self.OKGREEN + message + self.ENDC, end=end)
+    def success(self, message):
+        return self.OKGREEN + message + self.ENDC
 
-    def nice(self, message, end='\n'):
-        print(self.OKCYAN + message + self.ENDC, end=end)
+    def nice(self, message):
+        return self.OKCYAN + message + self.ENDC
 
-    def bold(self, message, end='\n'):
-        print(self.BOLD + message + self.ENDC, end=end)
+    def bold(self, message):
+        return self.BOLD + message + self.ENDC
