@@ -7,7 +7,8 @@ class CleanedData(Formatter):
 
     def __init__(self):
         '''
-        Reads in data from specific excel files and tidies it.
+        Reads in data from specific excel files and stores it in 
+        various variables.
         '''
         # We import programmatically for uniformity across children classes
         # EG ProccessedData, VisualisedData
@@ -16,7 +17,6 @@ class CleanedData(Formatter):
         from importlib import import_module
         self.np = import_module('numpy')
         self.pd = import_module('pandas')
-        self.statistics = import_module('statistics')
         self.os = import_module('os')
         self.sys = import_module('sys')
 
@@ -24,24 +24,53 @@ class CleanedData(Formatter):
         self.os.system("")
 
         # Initialise raw DataFrames
-        new_house_data = self.pd.read_excel('pricing-by-area-new.xlsx')
-        second_house_data = self.pd.read_excel('pricing-by-area-second.xlsx')
+        self.new_house_data = self.pd.read_excel('pricing-by-area-new.xlsx')
+        self.second_house_data = self.pd.read_excel('pricing-by-area-second.xlsx')
 
         # Column headings used to traverse raw DataFrame
-        self.new_headings = self.np.array(new_house_data.columns[1:8])
-        self.second_headings = self.np.array(second_house_data.columns[1:8])
+        self.new_headings = self.np.array(self.new_house_data.columns[1:8])
+        self.second_headings = self.np.array(self.second_house_data.columns[1:8])
 
         # List of all years and places from Data
         # used as row and column identifiers respectively
         self.years = self.np.array([], dtype=int)
-        self.places = self.np.array(new_house_data.iloc[0][1:8].tolist())
+        self.places = self.np.array(self.new_house_data.iloc[0][1:8].tolist())
+        # END OF AVERAGE PRICES PARSING
+        
+
+        # START OF RAW PRICES PARSING
+        self.raw_price = self.pd.read_csv("cleaned2.csv")
+
+        outlier_dict = {
+            'min': {
+                'Dublin': 150000,
+                'Cork': 125000,
+                'Galway': 135000,
+                'Limerick': 110000,
+                'Waterford': 100000,
+                'Other Areas': 80000
+            },
+            'max': {
+                'Dublin': 570000,
+                'Cork': 500000,
+                'Galway': 520000,
+                'Limerick': 440000,
+                'Waterford': 460000,
+                'Other Areas': 400000,
+            },
+            'new': 8,
+        }
+
+        self.clean_averages()
+        self.clean_raw_prices(outlier_dict)
+    
+    def clean_averages(self):
+        # Clean new listings excel sheet
+        # also adds each year to an array (CleanedData.years)
 
         # Create temp dictionary to house data
         data = {}
-
-        # Clean new listings excel sheet
-        # also adds each year to an array (CleanedData.years)
-        for index, row in new_house_data.iterrows():
+        for index, row in self.new_house_data.iterrows():
             if index < 7:
                 continue
             
@@ -53,13 +82,13 @@ class CleanedData(Formatter):
             if index == 47:
                 break
         
-        self.new = self.pd.DataFrame.from_dict(data, orient='index', columns=self.places)
+        self.new_avg = self.pd.DataFrame.from_dict(data, orient='index', columns=self.places)
         
         # reset data dict
         data = {}
 
         # clean old listings excel sheet
-        for index, row in second_house_data.iterrows():
+        for index, row in self.second_house_data.iterrows():
             if index < 7:
                 continue
             
@@ -69,7 +98,46 @@ class CleanedData(Formatter):
             if index == 47:
                 break
         
-        self.old = self.pd.DataFrame.from_dict(data, orient='index', columns=self.places)
+        self.old_avg = self.pd.DataFrame.from_dict(data, orient='index', columns=self.places)
+
+    def clean_raw_prices(self, outlier_dict):
+        # self.raw_final_new = []
+
+        # self.raw_price = self.raw_price.drop(columns=["Postal Code", "Not Full Market Price", "VAT Exclusive"])
+        # self.raw_price = self.raw_price.rename(columns={
+        #     "Date of Sale (dd/mm/yyyy)":"Year",
+        #     "Price (€)":"Price",
+        #     "Description of Property":"Description",
+        # })
+
+        for index, row in self.raw_price.iterrows():
+            # removes first character (€), any separating commas and turns to int
+            price = row['Price']
+            place = row['County']
+
+            if price < outlier_dict['min'][place] or price > outlier_dict['max'][place]:
+                self.raw_price = self.raw_price.drop([index])
+        #     row_place = self.raw_price.loc[index, 'County']
+        #     row_desc = self.raw_price.loc[index, 'Description']
+
+        #     if not row_place in self.places:
+        #         self.raw_price.loc[index, 'County'] = "Other Areas"
+        #         row_place = "Other Areas"
+            
+        #     self.raw_price.loc[index, 'Year'] = int(row['Year'].split('/')[-1])
+
+        #     if 'New' in row_desc:
+        #         self.raw_price.loc[index, 'Description'] = "New"
+        #         row_price = round((row_price / 100) * outlier_dict['new'])
+        #     else:
+        #         self.raw_price.loc[index, 'Description'] = "Second"
+
+        #     # outlier dictionary is passed where min and max values are defined
+        #     if row_price < outlier_dict['min'][row_place] or row_price > outlier_dict['max'][row_place]:
+        #         self.raw_price.drop([index])
+
+        self.raw_price.to_csv("cleaned.csv")
+        print("Success!")
         
     def get_every_nyears(self, df, n=1):
         '''
@@ -98,6 +166,7 @@ class CleanedData(Formatter):
                 self.bold(str(n))
             )
             return
+
         return df.iloc[[self.years.tolist().index(x) for x in self.years if (x - 1976) % n == 0]]
 
     def get_between(self, df, year1, year2):
@@ -151,6 +220,5 @@ class CleanedData(Formatter):
         
 if __name__=='__main__':
     cleaned = CleanedData()
-    new_df = cleaned.get_every_nyears(cleaned.new, 50)
-    print(new_df)
+    # print(cleaned.raw_price)
 #     print(cleaned.search('2004', 'dublin'))
