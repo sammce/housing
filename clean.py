@@ -1,5 +1,4 @@
 from formatter import Formatter
-
 class CleanedData(Formatter):
 
     # Create dictionary to house cleaned DataFrames
@@ -39,7 +38,8 @@ class CleanedData(Formatter):
         
 
         # START OF RAW PRICES PARSING
-        self.raw_price = self.pd.read_csv("cleaned2.csv")
+        self.raw_data = self.pd.read_csv("with_outliers.csv")
+        self.cleaned_data = self.pd.read_csv("cleaned.csv")
 
         outlier_dict = {
             'min': {
@@ -62,7 +62,7 @@ class CleanedData(Formatter):
         }
 
         self.clean_averages()
-        self.clean_raw_prices(outlier_dict)
+        # self.clean_raw_prices(outlier_dict)
     
     def clean_averages(self):
         # Clean new listings excel sheet
@@ -103,20 +103,20 @@ class CleanedData(Formatter):
     def clean_raw_prices(self, outlier_dict):
         # self.raw_final_new = []
 
-        # self.raw_price = self.raw_price.drop(columns=["Postal Code", "Not Full Market Price", "VAT Exclusive"])
+        self.cleaned_prices = self.cleaned_prices.drop(columns=["Unnamed: 0.1"])
         # self.raw_price = self.raw_price.rename(columns={
         #     "Date of Sale (dd/mm/yyyy)":"Year",
         #     "Price (€)":"Price",
         #     "Description of Property":"Description",
         # })
 
-        for index, row in self.raw_price.iterrows():
+        for index, row in self.raw_data.iterrows():
             # removes first character (€), any separating commas and turns to int
             price = row['Price']
             place = row['County']
 
-            if price < outlier_dict['min'][place] or price > outlier_dict['max'][place]:
-                self.raw_price = self.raw_price.drop([index])
+            # if price < outlier_dict['min'][place] or price > outlier_dict['max'][place]:
+                # self.raw_price = self.raw_price.drop([index])
         #     row_place = self.raw_price.loc[index, 'County']
         #     row_desc = self.raw_price.loc[index, 'Description']
 
@@ -133,10 +133,10 @@ class CleanedData(Formatter):
         #         self.raw_price.loc[index, 'Description'] = "Second"
 
         #     # outlier dictionary is passed where min and max values are defined
-        #     if row_price < outlier_dict['min'][row_place] or row_price > outlier_dict['max'][row_place]:
-        #         self.raw_price.drop([index])
+            if price < outlier_dict['min'][place] or price > outlier_dict['max'][place]:
+                self.cleaned_prices = self.cleaned_prices.drop([index])
 
-        self.raw_price.to_csv("cleaned.csv")
+        self.cleaned_prices.to_csv("cleaned.csv", index=False)
         print("Success!")
         
     def get_every_nyears(self, df, n=1):
@@ -152,21 +152,6 @@ class CleanedData(Formatter):
         # check would be (year - 1976) % n == 0
         #                      30      % 5 == 0
         # This returns True, so this row would be included in the returned DataFrame
-        if n > 40:
-            print(
-                self.warn("There is only "),
-                self.bold("40 "),
-                self.warn("years in data"),
-                self.bold("n"),
-                self.warn("must be <= "),
-                self.bold("40")
-            )
-            print(
-                self.warn("You entered"),
-                self.bold(str(n))
-            )
-            return
-
         return df.iloc[[self.years.tolist().index(x) for x in self.years if (x - 1976) % n == 0]]
 
     def get_between(self, df, year1, year2):
@@ -198,27 +183,11 @@ class CleanedData(Formatter):
         Gets the int value for the given location from the given year.\n
         Returns an int, or prints an error message if no results are found.
         '''
-        try:
-            search_result = df.loc[int(year), location.title()]
-        except KeyError as e:
-            print(
-                self.warn("Year key "),
-                self.bold(str(e.args[0])),
-            )
-            if type(e.args[0]) == int:
-                print(
-                    self.warn(f" yielded no results in DataFrame search.\nYears in data range from "),
-                    self.bold('1976 - 2016')
-                ) 
-            else:
-                print(
-                    self.warn(f" yielded no results in DataFrame search.\nPlaces in data are "),
-                    self.bold(', '.join(self.places))
-                )
-            return 
-        return search_result
+        return df.loc[int(year), location.title()]
         
 if __name__=='__main__':
     cleaned = CleanedData()
+    print(cleaned.fatal("\nWarning:"))
+    print(cleaned.warn("You searched for ") + cleaned.bold('Dublin') + cleaned.warn(" but that yielded no results"))
     # print(cleaned.raw_price)
 #     print(cleaned.search('2004', 'dublin'))

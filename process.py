@@ -12,7 +12,7 @@ class ProcessedData(CleanedData):
         '''
         self.change_frames = self.np.array([])
         
-        for index, frame in enumerate([self.new, self.old]):
+        for index, frame in enumerate([self.new_avg, self.old_avg]):
             data = {}
             for year in self.years:
                 if year == 1976:
@@ -37,17 +37,14 @@ class ProcessedData(CleanedData):
             else:
                 self.old_change = self.pd.DataFrame.from_dict(data, orient="index", columns=self.places)
 
-    def get_median(self, data_list):
-        return data_list[len(data_list) // 2] 
+    def get_median(self, df, column_label):
+        return df.loc[:, column_label].median()
 
-    def get_mode(self, data_list):
-        return self.np.mode(data_list)
+    def get_mode(self, df, column_label):
+        return df.loc[:, column_label].mode()
 
-    def get_mean(self, data_list):
-        return self.np.mean(data_list)
-    
-    def get_manual_mean(self, data_list):
-        return sum(data_list) / len(data_list)
+    def get_mean(self, df, column_label):
+        return df.loc[:, column_label].mean()
 
     def get_frequency(self, data_list):
         data = self.pd.Series(data_list)
@@ -64,6 +61,5 @@ class ProcessedData(CleanedData):
 
 if __name__=='__main__':
     processed = ProcessedData()
-    
-    change_dict = processed.search(processed.new_change, 'dublin', 2004)
-    print(change_dict['num'])
+    price_mean = processed.get_mean(processed.cleaned_data, 'Price')
+    print(price_mean)
