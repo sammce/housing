@@ -1,0 +1,40 @@
+# Data Processing
+
+
+
+## Annual increase
+
+###
+
+
+
+## Annual percentage increase
+
+###
+
+
+
+
+
+## Averages
+
+
+### To figure out the mean values of the data, we used the mean function imported from Numpy
+### ```code```
+
+### To figure out the median values of the data, we used the built in median function
+### ```code```
+
+### To figure out the modal values of the data, we used the mode function
+### imported from Numpy
+### ```code```
+
+
+### To figure out the minimum and maximmum values of the data, we used one of the functions
+### imported from Numpy
+### ```code```
+
+
+### To figure out the frequency of values in the data, we used one the frequency
+### function imported from Pandas
+### ```code```
