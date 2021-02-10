@@ -187,7 +187,9 @@ class CleanedData(Formatter):
         
 if __name__=='__main__':
     cleaned = CleanedData()
-    print(cleaned.fatal("\nWarning:"))
-    print(cleaned.warn("You searched for ") + cleaned.bold('Dublin') + cleaned.warn(" but that yielded no results"))
-    # print(cleaned.raw_price)
+    dublin_houses = cleaned.cleaned_data.loc[cleaned.cleaned_data['County'] == 'Dublin']
+    houses_2015 = dublin_houses.loc[dublin_houses['Year'] == 2015]
+    mean_2015 = houses_2015['Price'].mean()
+    print(mean_2015)
+    # print(cleaned.raw_price)  
 #     print(cleaned.search('2004', 'dublin'))
