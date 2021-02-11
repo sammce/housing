@@ -56,7 +56,7 @@ graph = px.bar(our_average, x="Place", y="Average Price (€)", color="Place", t
 
 # bar chart of percentage increases in a specified year (GOV DATA)
 # from 1976 - 2016
-year = 2006
+year = 2008
 new = True # Change True to False to get second hand values
 data = []
 
@@ -151,7 +151,66 @@ graph = px.bar(average, x="Place", y=["Our Average Price (€)", "Government Ave
 
 
 
+# bar chart of average price new and old in specified years side by side (BOTH OURS AND GOV DATA)
+# 1976 - 2019
+year = 2017
 
+
+df = visualised.cleaned_data
+data = []
+
+if year > 2009:
+    for place in visualised.places_no_national:
+
+        our_averages_df_new = df[
+            (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "New")
+        ]
+        our_averages_df_old = df[
+            (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "Second")
+        ]
+        data.append([place, round(our_averages_df_new['Price'].mean()), round(our_averages_df_old['Price'].mean())])
+else:
+    for place in visualised.places:
+        gov_average_new = visualised.new_avg.loc[year, place]
+        gov_average_old = visualised.old_avg.loc[year, place]
+
+        data.append([place, round(gov_average_new), round(gov_average_old)])
+
+our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average New Price (€)', 'Average Second Hand Price (€)'])
+graph = px.bar(our_average, x="Place", y=['Average New Price (€)', 'Average Second Hand Price (€)'], title=f"New and Second Hand average prices for {year}", barmode="group")
+# graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
+# graph.show()
+
+
+
+
+# scatter for place through the years
+place = "Dublin"
+new = False # Change to False for second hand
+
+desc = "New" if new else "Second Hand"
+
+our_df = visualised.cleaned_data
+gov_df = visualised.new_avg if new else visualised.old_avg
+data = []
+
+for year in visualised.all_years:
+    if year > 2009:
+        our_averages_df = df[
+            (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "New")
+        ] if new else df[
+            (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "Second")
+        ]
+        data.append([year, round(our_averages_df['Price'].mean())])
+    else:
+        gov_average = gov_df.loc[year, place]
+        data.append([year, gov_average])
+        
+our_average = visualised.pd.DataFrame(data, columns=['Year', 'Average Price (€)'])
+print(our_average)
+graph = px.line(our_average, x='Year', y='Average Price (€)', title=f"Price of {desc} houses in {place} from 1976 - 2019")
+# graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
+graph.show()
 if __name__ == '__main__':
     pass
     # processed = ProcessedData(new=True)

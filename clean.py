@@ -78,6 +78,8 @@ class CleanedData(Formatter):
                 break
         
         self.old_avg = self.pd.DataFrame.from_dict(data, orient='index', columns=self.places)
+
+        self.all_years = self.np.concatenate((self.years, [2017, 2018, 2019]))
         
     def get_every_nyears(self, df, n=1):
         '''
