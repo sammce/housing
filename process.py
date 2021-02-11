@@ -138,6 +138,22 @@ class ProcessedData(CleanedData):
 
 
 
-if __name__=='__main__':
-    processed = ProcessedData(new=True)
+if __name__ == '__main__':
+    import plotly.express as px
+    processed = ProcessedData()
+    df = processed.cleaned_data
+    data = []
+    for place in processed.places:
+        if place == 'National':
+            continue
+
+        new_df = df[
+            (df['Year'] == 2012) & (df['County'] == place) & (df['Description']== 'New')
+        ]
+        data.append([place, round(new_df['Price'].mean())])
+
+    our_average_2012 = processed.pd.DataFrame(data, columns=['Place', 'Price'])
+    print(our_average_2012)
+    graph = px.scatter(our_average_2012, x="Place", y="Price")
+    graph.write_html("2012_new.html", full_html=False, include_plotlyjs=False)
     
