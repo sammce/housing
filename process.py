@@ -76,7 +76,7 @@ class ProcessedData(CleanedData):
                     difference = place_value - prev_place_value
                     percentage = round((difference / prev_place_value) * 100, 2)
 
-                    row_values.append({'num':difference, 'percent':percentage})
+                    row_values.append({'numerical':difference, 'percent':percentage})
                 data[year] = row_values
 
             # appends the DataFrame remade with the calculated percentages dict above to self.change_frames
@@ -109,7 +109,7 @@ class ProcessedData(CleanedData):
         print(self.bold(f"{self.tidy_comma_number(len(df.index))}"), end="\n\n")
 
     def test_averages(self):
-        year = 2012
+        year = 2015
         new = False
 
         if new:
@@ -143,17 +143,19 @@ if __name__ == '__main__':
     processed = ProcessedData()
     df = processed.cleaned_data
     data = []
-    for place in processed.places:
-        if place == 'National':
-            continue
+    for year in processed.years_from_2010:
+        for place in processed.places:
+            if place == 'National':
+                continue
 
-        new_df = df[
-            (df['Year'] == 2012) & (df['County'] == place) & (df['Description']== 'New')
-        ]
-        data.append([place, round(new_df['Price'].mean())])
+            new_df = df[
+                (df['Year'] == year) & (df['County'] == place) & (df['Description']== 'New')
+            ]
+            
+            data.append([place, round(new_df['Price'].mean()), year])
 
-    our_average_2012 = processed.pd.DataFrame(data, columns=['Place', 'Price'])
-    print(our_average_2012)
-    graph = px.scatter(our_average_2012, x="Place", y="Price")
-    graph.write_html("2012_new.html", full_html=False, include_plotlyjs=False)
+    our_average_2012 = processed.pd.DataFrame(data, columns=['Place', 'Price', 'Year'])
+    graph = px.scatter_3d(our_average_2012, x="Place", y="Price", z="Year", color="Place")
+    # graph.write_html("2012_new.html", full_html=False, include_plotlyjs=False)
+    graph.show()
     

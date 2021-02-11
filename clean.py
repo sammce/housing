@@ -33,6 +33,7 @@ class CleanedData(Formatter):
         # List of all years and places from Data
         # used as row and column identifiers respectively
         self.years = self.np.array([], dtype=int)
+        self.years_from_2010 = self.np.array([], dtype=int)
         self.places = self.np.array(self.new_house_data.iloc[0][1:8].tolist())
         self.places_no_national = self.np.array(self.new_house_data.iloc[0][2:8].tolist())
 
@@ -49,7 +50,11 @@ class CleanedData(Formatter):
                 continue
             
             year = row['YEAR']
+
             self.years = self.np.append(self.years, [year])
+            if int(year) > 2009:
+                self.years_from_2010 = self.np.append(self.years_from_2010, [year])
+            
 
             # Shorthand for looping through row and rounding each value
             data[year] = list(map(lambda x: round(x), row[self.new_headings].tolist()))
