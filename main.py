@@ -17,7 +17,7 @@ for year in visualised.years_from_2010:
 
 our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average Price (€)', 'Year'])
 graph = px.scatter_3d(our_average, x="Place", y="Average Price (€)", z="Year", color="Place", title="Our computed averages for each county and year")
-# graph.write_html("3d_scatter_per_year.html", full_html=False, include_plotlyjs=False)
+# graph.write_html("3d_scatter_per_year_scatter_3d.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
@@ -48,7 +48,7 @@ for place in visualised.places_no_national:
 
 our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average Price (€)'])
 graph = px.bar(our_average, x="Place", y="Average Price (€)", color="Place", title=f"Our calculated averages for each county in {year} ({desc} {suffix})")
-# graph.write_html(f"average_{year}_{file_desc}.html", full_html=False, include_plotlyjs=False)
+# graph.write_html(f"average_{year}_{file_desc}_bar.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
@@ -77,7 +77,7 @@ for place in visualised.places:
 
 our_average = visualised.pd.DataFrame(data, columns=['Place', 'Change (%)'])
 graph = px.bar(our_average, x="Place", y="Change (%)", color="Place", title=f"Numerical change from {year-1} - {year} ({desc} {suffix})")
-# graph.write_html(f"percentage_{year}.html", full_html=False, include_plotlyjs=False)
+# graph.write_html(f"percentage_{year}_bar.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
@@ -109,7 +109,7 @@ for place in visualised.places:
 
 our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average Price (€)'])
 graph = px.bar(our_average, x="Place", y="Average Price (€)", color="Place", title=f"Government averages in {year} ({desc} {suffix})")
-# graph.write_html(f"gov_average_{year}_{file_desc}.html", full_html=False, include_plotlyjs=False)
+# graph.write_html(f"gov_average_{year}_{file_desc}_bar.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
@@ -146,7 +146,7 @@ for place in visualised.places_no_national:
 
 average = visualised.pd.DataFrame(data, columns=['Place', 'Our Average Price (€)', "Government Average (€)"])
 graph = px.bar(average, x="Place", y=["Our Average Price (€)", "Government Average (€)"], title=f"Government and our averages in {year} ({desc} {suffix})", barmode="group")
-# graph.write_html(f"gov_average_{year}_{file_desc}.html", full_html=False, include_plotlyjs=False)
+# graph.write_html(f"gov_average_{year}_{file_desc}_multibar.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
@@ -178,17 +178,18 @@ else:
 
 our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average New Price (€)', 'Average Second Hand Price (€)'])
 graph = px.bar(our_average, x="Place", y=['Average New Price (€)', 'Average Second Hand Price (€)'], title=f"New and Second Hand average prices for {year}", barmode="group")
-# graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
+# graph.write_html(f"new_and_old_average_{year}_multibar.html", full_html=False, include_plotlyjs=False)
 # graph.show()
 
 
 
 
-# scatter for place through the years
+# scatter for average price in place through the years
 place = "Dublin"
 new = False # Change to False for second hand
 
 desc = "New" if new else "Second Hand"
+file_desc = "new" if new else "old"
 
 our_df = visualised.cleaned_data
 gov_df = visualised.new_avg if new else visualised.old_avg
@@ -207,10 +208,41 @@ for year in visualised.all_years:
         data.append([year, gov_average])
         
 our_average = visualised.pd.DataFrame(data, columns=['Year', 'Average Price (€)'])
-print(our_average)
 graph = px.line(our_average, x='Year', y='Average Price (€)', title=f"Price of {desc} houses in {place} from 1976 - 2019")
-graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
-graph.show()
+# graph.write_html(f"{place.lower()}_averages_{file_desc}_line.html", full_html=False, include_plotlyjs=False)
+# graph.show()
+
+
+
+
+# scatter for average price in every place through the years
+new = True # Change to False for second hand
+
+desc = "New" if new else "Second Hand"
+file_desc = "new" if new else "old"
+
+our_df = visualised.cleaned_data
+gov_df = visualised.new_avg if new else visualised.old_avg
+data = []
+
+for year in visualised.all_years:
+    if year > 2009:
+        for place in visualised.places_no_national:
+            our_averages_df = df[
+                (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "New")
+            ] if new else df[
+                (df['Year'] == year) & (df['County'] == place) & (df['Description'] == "Second")
+            ]
+            data.append([year, place, round(our_averages_df['Price'].mean())])
+    else:
+        for place in visualised.places_no_national:
+            gov_average = gov_df.loc[year, place]
+            data.append([year, place, gov_average])
+        
+our_average = visualised.pd.DataFrame(data, columns=['Year', 'County', 'Average Price (€)'])
+graph = px.line(our_average, x='Year', y='Average Price (€)', color="County", title=f"Price of {desc} houses nationwide from 1976 - 2019")
+# graph.write_html(f"nationwide_averages_line_{file_desc}.html", full_html=False, include_plotlyjs=False)
+# graph.show()
 if __name__ == '__main__':
     pass
     # processed = ProcessedData(new=True)
