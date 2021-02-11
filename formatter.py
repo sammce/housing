@@ -24,3 +24,14 @@ class Formatter():
 
     def bold(self, message):
         return self.BOLD + message + self.ENDC
+
+    def tidy_comma_number(self, num):
+        num = str(num)
+        num_length = len(str(num))
+        if num_length % 3 == 0:
+            modifier = 1
+        else:
+            modifier = 0
+        for i in range((num_length // 3)-modifier):
+            num = num[:num_length-(3*(i+1))] + ',' + num[num_length-(3*(i+1))::]
+        return num
