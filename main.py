@@ -209,7 +209,7 @@ for year in visualised.all_years:
 our_average = visualised.pd.DataFrame(data, columns=['Year', 'Average Price (€)'])
 print(our_average)
 graph = px.line(our_average, x='Year', y='Average Price (€)', title=f"Price of {desc} houses in {place} from 1976 - 2019")
-# graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
+graph.write_html(f"new_and_old_average_{year}.html", full_html=False, include_plotlyjs=False)
 graph.show()
 if __name__ == '__main__':
     pass

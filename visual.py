@@ -1,46 +1,67 @@
-from process import ProcessedData
 import plotly.express as px
-import pandas as pd
+from process import ProcessedData
 
 class VisualisedData(ProcessedData):
 
     def __init__(self):
         super().__init__()
 
+# bar chart of average price by county (OUR DATA)
+# from 2010 - 2019
+visualised = VisualisedData()
+df = visualised.cleaned_data
+year = 2010
+new = True # Change to False to get second hand values
+data = []
 '''
-if __name__=='__main__':
-    visualised = VisualisedData()
-    df = visualised.cleaned_data
-    houses_2011 = df[
-        df['Year'] == 2011
+if new:
+    desc = "New"
+    suffix = ""
+    file_desc = "new"
+else:
+    desc = "Second"
+    suffix = "Hand"
+    file_desc = "old"
+
+for place in visualised.places_no_national:
+
+    our_averages_df = df[
+        (df['Year'] == year) & (df['County'] == place) & (df['Description'] == desc)
     ]
-    dublin_houses_2011 = houses_2011[
-        houses_2011['County'] == 'Dublin'
-    ]
-    print(round(dublin_houses_2011['Price'].mean()))
+    data.append([place, round(our_averages_df['Price'].mean())])
+
+our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average Price (€)'])
+graph = px.bar(our_average, x="Place", y="Average Price (€)", color="Place", title=f"Our calculated averages for each county in {year} ({desc} {suffix})")
+graph.write_html(f"average_{year}_{file_desc}.html", full_html=False, include_plotlyjs=False)
+#graph.show()
 '''
 
-if __name__ == '__main__':
-    visualised = VisualisedData()
-    df = visualised.cleaned_data
-    data = []
-    for place in visualised.places:
-        if place == 'National':
-            continue
 
-        new_df = df[
-            (df['Year'] == 2012) & (df['County'] == place) & (df['Description']== 'New')
-        ]
-        data.append([place, round(new_df['Price'].mean())])
+# bar chart of average price in specified year (GOV DATA)
+# 1976 - 2016
+year = 1980
+new = True # Change to False to get second hand values
+if new:
+    df = visualised.new_avg
+else:
+    df = visualised.old_avg
+data = []
 
-    our_average_2012 = visualised.pd.DataFrame(data, columns=['Place', 'Price'])
-    print(our_average_2012)
-    graph = px.scatter(our_average_2012, x="Place", y="Price")
-    graph.write_html("2012_new.html", full_html=False, include_plotlyjs=False)
+if new:
+    desc = "New"
+    suffix = ""
+    file_desc = "new"
+else:
+    desc = "Second"
+    suffix = "Hand"
+    file_desc = "old"
 
+for place in visualised.places:
 
-'''
-df = px.data.gapminder().query("continent=='Oceania'")
-fig = px.line(df, x="year", y="lifeExp", color='lifeExp')
-fig.show()
-'''
+    gov_average = df.loc[year, place]
+    data.append([place, round(gov_average)])
+
+our_average = visualised.pd.DataFrame(data, columns=['Place', 'Average Price (€)'])
+graph = px.bar(our_average, x="Place", y="Average Price (€)", color="Place", title=f"Government averages in {year} ({desc} {suffix})")
+graph.write_html(f"gov_average_{year}_{file_desc}.html", full_html=False, include_plotlyjs=False)
+#graph.show()
