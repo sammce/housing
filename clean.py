@@ -137,7 +137,8 @@ class CleanedData(Formatter):
                 
 if __name__=='__main__':
     import plotly.express as px
-    # cleaned = CleanedData(new=True)
+    cleaned = CleanedData()
+    print(cleaned.get_every_nyears(cleaned.new_avg, 5))
 
     # data = []
     # for place in cleaned.places:

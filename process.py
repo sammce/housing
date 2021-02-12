@@ -102,8 +102,8 @@ class ProcessedData(CleanedData):
             dataframes.append(old_df)
             dataframes.append(new_df)
         df = self.pd.concat(dataframes)
-        df.to_csv('cleaned.csv')
-        print(self.success("Data cleaned!"))
+        # df.to_csv('cleaned.csv')
+        print(self.success("\nData cleaned!"))
         print(self.bold("359,629"), end=" ")
         print(self.success("rows became"), end=" ")
         print(self.bold(f"{self.tidy_comma_number(len(df.index))}"), end="\n\n")
@@ -140,7 +140,7 @@ class ProcessedData(CleanedData):
 
 if __name__ == '__main__':
     import plotly.express as px
-    processed = ProcessedData()
+    processed = ProcessedData(new=True)
     df = processed.cleaned_data
     data = []
     for year in processed.years_from_2010:
