@@ -119,14 +119,19 @@ class ProcessedData(CleanedData):
 
         for place in self.places_no_national:
             gov_avg = gov_df.loc[year, place]
-            our_mean = our_df[(our_df['Year'] == year) & (our_df['County'] == place)]['Price'].mean()
-            
+            our_mean = our_df[(our_df['Year'] == year) & 
+            (our_df['County'] == place)]['Price'].mean()
+
 
             if new:
-                our_avg = round(our_mean + (our_mean * self.new_change.loc[year, place]["percent"]*0.01 ))
+                our_avg = round(
+                  our_mean + (our_mean * self.new_change.loc[year, place]["percent"]*0.01 )
+                )
             else: 
-                our_avg = round(our_mean + (our_mean * self.old_change.loc[year, place]["percent"]*0.01 ))
-            
+                our_avg = round(
+                  our_mean + (our_mean * self.old_change.loc[year, place]["percent"]*0.01 )
+                )
+
             print(self.success('Place: ') + self.bold(place))
             print(self.nice('Government average: ') + self.bold(str(gov_avg)))
             print(self.nice('Our computed average: ') + self.bold(str(our_avg)))
