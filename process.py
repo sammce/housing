@@ -42,18 +42,16 @@ class ProcessedData(CleanedData):
             self.test_averages()
 
     def get_median(self, df, column_label):
-        return df.loc[:, column_label].median()
+        return df.[column_label].median()
 
     def get_mode(self, df, column_label):
-        return df.loc[:, column_label].mode()
+        return df.[column_label].mode()
 
     def get_mean(self, df, column_label):
-        return df.loc[:, column_label].mean()
+        return df.[column_label].mean()
 
     def get_frequency(self, data_list):
         data = self.pd.Series(data_list)
-        data.value_counts()
-        data.value_counts(sort=False)
         return data.value_counts()
 
     def get_min_max(self, data_list):
