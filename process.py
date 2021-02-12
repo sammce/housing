@@ -93,9 +93,16 @@ class ProcessedData(CleanedData):
                 (df['Price'] > outlier_dict['min'][place])
             ]
             new_df = df[
+                # get all where county = current place, condition = new
                 (df['County'] == place) & (df['Description'] == 'New') & 
-                (df['Price'] < outlier_dict['max'][place] + outlier_dict['max'][place]*outlier_dict['new'][place]) & 
-                (df['Price'] > outlier_dict['min'][place] + outlier_dict['min'][place]*outlier_dict['new'][place])
+
+                # and where price is less than the max value + new multiplier
+                (df['Price'] < outlier_dict['max'][place] + 
+                outlier_dict['max'][place]*outlier_dict['new'][place]) & 
+
+                # and where price is more than the min value + new multiplier
+                (df['Price'] > outlier_dict['min'][place] + 
+                outlier_dict['min'][place]*outlier_dict['new'][place])
             ]
             dataframes.append(old_df)
             dataframes.append(new_df)
