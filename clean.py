@@ -1,4 +1,5 @@
 from formatter import Formatter
+
 class CleanedData(Formatter):
 
     # Create dictionary to house cleaned DataFrames
