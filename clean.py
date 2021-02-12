@@ -46,6 +46,7 @@ class CleanedData(Formatter):
         # Create temp dictionary to house data
         data = {}
         for index, row in self.new_house_data.iterrows():
+            # index 7 is where valid data startsj
             if index < 7:
                 continue
             
@@ -58,6 +59,8 @@ class CleanedData(Formatter):
 
             # Shorthand for looping through row and rounding each value
             data[year] = list(map(lambda x: round(x), row[self.new_headings].tolist()))
+            
+            # index 47 is where valid data ends
             if index == 47:
                 break
         
