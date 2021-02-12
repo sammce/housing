@@ -1,4 +1,5 @@
 from formatter import Formatter
+
 class CleanedData(Formatter):
 
     # Create dictionary to house cleaned DataFrames
@@ -17,7 +18,6 @@ class CleanedData(Formatter):
         self.np = import_module('numpy')
         self.pd = import_module('pandas')
         self.os = import_module('os')
-        self.sys = import_module('sys')
 
         # Makes ANSI codes work for formatting
         self.os.system("")
@@ -89,7 +89,6 @@ class CleanedData(Formatter):
         Gets a row from a given DataFrame every n rows.\n
         Returns a DataFrame.
         '''
-        # returns one row every *years* rows
 
         # let n = 5
         # let year in row = 2006

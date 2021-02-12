@@ -42,18 +42,16 @@ class ProcessedData(CleanedData):
             self.test_averages()
 
     def get_median(self, df, column_label):
-        return df.loc[:, column_label].median()
+        return df.[column_label].median()
 
     def get_mode(self, df, column_label):
-        return df.loc[:, column_label].mode()
+        return df.[column_label].mode()
 
     def get_mean(self, df, column_label):
-        return df.loc[:, column_label].mean()
+        return df.[column_label].mean()
 
     def get_frequency(self, data_list):
         data = self.pd.Series(data_list)
-        data.value_counts()
-        data.value_counts(sort=False)
         return data.value_counts()
 
     def get_min_max(self, data_list):
@@ -95,9 +93,16 @@ class ProcessedData(CleanedData):
                 (df['Price'] > outlier_dict['min'][place])
             ]
             new_df = df[
+                # get all where county = current place, condition = new
                 (df['County'] == place) & (df['Description'] == 'New') & 
-                (df['Price'] < outlier_dict['max'][place] + outlier_dict['max'][place]*outlier_dict['new'][place]) & 
-                (df['Price'] > outlier_dict['min'][place] + outlier_dict['min'][place]*outlier_dict['new'][place])
+
+                # and where price is less than the max value + new multiplier
+                (df['Price'] < outlier_dict['max'][place] + 
+                outlier_dict['max'][place]*outlier_dict['new'][place]) & 
+
+                # and where price is more than the min value + new multiplier
+                (df['Price'] > outlier_dict['min'][place] + 
+                outlier_dict['min'][place]*outlier_dict['new'][place])
             ]
             dataframes.append(old_df)
             dataframes.append(new_df)
@@ -121,14 +126,19 @@ class ProcessedData(CleanedData):
 
         for place in self.places_no_national:
             gov_avg = gov_df.loc[year, place]
-            our_mean = our_df[(our_df['Year'] == year) & (our_df['County'] == place)]['Price'].mean()
-            
+            our_mean = our_df[(our_df['Year'] == year) & 
+            (our_df['County'] == place)]['Price'].mean()
+
 
             if new:
-                our_avg = round(our_mean + (our_mean * self.new_change.loc[year, place]["percent"]*0.01 ))
+                our_avg = round(
+                  our_mean + (our_mean * self.new_change.loc[year, place]["percent"]*0.01 )
+                )
             else: 
-                our_avg = round(our_mean + (our_mean * self.old_change.loc[year, place]["percent"]*0.01 ))
-            
+                our_avg = round(
+                  our_mean + (our_mean * self.old_change.loc[year, place]["percent"]*0.01 )
+                )
+
             print(self.success('Place: ') + self.bold(place))
             print(self.nice('Government average: ') + self.bold(str(gov_avg)))
             print(self.nice('Our computed average: ') + self.bold(str(our_avg)))
